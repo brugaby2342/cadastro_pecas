@@ -18,3 +18,7 @@
 #Quantidade de caixas
 
 
+id = input('Peça: ')
+peso = float(input('Qual o peso da peça: '))
+cor = input('Qual a cor da peça: ')
+comprimento = float(input('Qual o comprimento da peça: '))
