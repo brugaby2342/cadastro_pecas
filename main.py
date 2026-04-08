@@ -9,6 +9,7 @@
 #cor azul ou verde
 #comprimento entre 10 cm e 20 cm
 
+#remover peça cadastrada
 #armazenar as peças em caixas (10 peças por caixa)
 #quando alcancar as 10 peças, fechar a caixa e abrir uma nova
 
@@ -22,3 +23,15 @@ id = input('Peça: ')
 peso = float(input('Qual o peso da peça: '))
 cor = input('Qual a cor da peça: ')
 comprimento = float(input('Qual o comprimento da peça: '))
+
+pecas_cadastradas = [] # cada peça com suas características
+caixas_fechadas = []
+caixa_atual = []
+
+def exibir_menu():
+    print('1. Cadastrar nova peça')
+    print('2. Listar peças cadastradas')
+    print('3. Remover peça cadastrada')
+    print('4. Listar caixas')
+    print('5. Gerar relatório final')
+    print('0. Sair do programa')
