@@ -29,6 +29,7 @@ caixas_fechadas = []
 caixa_atual = []
 
 def exibir_menu():
+    print('Sistema de Gestão de Peças')
     print('1. Cadastrar nova peça')
     print('2. Listar peças cadastradas')
     print('3. Remover peça cadastrada')
