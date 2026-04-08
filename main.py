@@ -18,21 +18,51 @@
 #Total de peças reprovadas, com o motivo da reprovação
 #Quantidade de caixas
 
-
-id = input('Peça: ')
-peso = float(input('Qual o peso da peça: '))
-cor = input('Qual a cor da peça: ')
-comprimento = float(input('Qual o comprimento da peça: '))
-
 pecas_cadastradas = [] # cada peça com suas características
-caixas_fechadas = []
-caixa_atual = []
+caixas_fechadas = [] # caixas que já atingiram a capacidade máxima (10)
+caixa_atual = [] # caixa que está sendo usada no momento
 
 def exibir_menu():
-    print('Sistema de Gestão de Peças')
-    print('1. Cadastrar nova peça')
-    print('2. Listar peças cadastradas')
-    print('3. Remover peça cadastrada')
-    print('4. Listar caixas')
-    print('5. Gerar relatório final')
-    print('0. Sair do programa')
+    print("Sistema de Gestão de Peças")
+    print("1. Cadastrar nova peça")
+    print("2. Listar peças cadastradas")
+    print("3. Remover peça cadastrada")
+    print("4. Listar caixas fechadas")
+    print("5. Gerar relatório final")
+    print("0. Sair do programa")
+
+
+# Exibir o menu para que o usuário digite uma entrada
+
+while True:
+    exibir_menu()
+    opcao = input("Selecione uma das seguintes opções: ")
+
+    if opcao == '1':
+        print("Iniciando cadastro de nova peça...")
+        
+        id_peca = input("Digite o nome da peça: ")
+        peso = float(input("Digite o peso da peça (g): "))
+        cor = input("Digite a cor da peça: ")
+        comprimento = float(input("Digite o comprimento da peça (cm): "))
+    
+
+    elif opcao == '2':
+        print("Listando peças cadastradas...")
+    
+    elif opcao == '3':
+        print("Removendo peça...")
+    
+    elif opcao == '4':
+        print("Listando caixas fechadas...")
+    
+    elif opcao == '5':
+        print("Gerando relatório...")
+    
+    elif opcao == '0':
+        print("Sistema encerrado!")
+    
+    else:
+        print("Opção inválida! Por favor, digite um número entre 0 e 5.")
+
+
