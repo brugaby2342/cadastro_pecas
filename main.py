@@ -23,13 +23,16 @@ caixas_fechadas = [] # caixas que já atingiram a capacidade máxima (10)
 caixa_atual = [] # caixa que está sendo usada no momento
 
 def exibir_menu():
-    print("Sistema de Gestão de Peças")
+    print("\n" + "="*30 + "\n")
+    print("SISTEMA DE GESTÃO DE PEÇAS")
+    print("\n" + "="*30)
     print("1. Cadastrar nova peça")
     print("2. Listar peças cadastradas")
     print("3. Remover peça cadastrada")
     print("4. Listar caixas fechadas")
     print("5. Gerar relatório final")
     print("0. Sair do programa")
+    print("="*30 + "\n")
 
 
 # Exibir o menu para que o usuário digite uma entrada
@@ -45,6 +48,13 @@ while True:
         peso = float(input("Digite o peso da peça (g): "))
         cor = input("Digite a cor da peça: ")
         comprimento = float(input("Digite o comprimento da peça (cm): "))
+
+        peca = {
+            "id": id_peca,
+            "peso": peso,
+            "cor": cor,
+            "comprimento": comprimento
+        }
     
 
     elif opcao == '2':
@@ -64,5 +74,6 @@ while True:
     
     else:
         print("Opção inválida! Por favor, digite um número entre 0 e 5.")
+    break
 
 
