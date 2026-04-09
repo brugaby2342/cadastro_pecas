@@ -55,13 +55,13 @@ while True:
         
         motivos_reprovacao = []
         
-        """peso entre 95 g e 105 g
-        peso >= 95 e <= 105
-        cor precisa ser azul ou verde
-        cor == azul or verde
-        comprimento entre 10 cm e 20 cm
-        comprimento >=10 e <= 20
-        o que reprovar inclui na lista motivos_reprovacoes"""
+        # peso entre 95 g e 105 g
+        # peso >= 95 e <= 105
+        # cor precisa ser azul ou verde
+        # cor == azul or verde
+        # comprimento entre 10 cm e 20 cm
+        # comprimento >=10 e <= 20
+        # o que reprovar inclui na lista motivos_reprovacoes
 
         if not (95.00 <= peso <= 105.00):
             motivos_reprovacao.append(peso)
@@ -73,28 +73,39 @@ while True:
             motivos_reprovacao.append(comprimento)
         
         
-
-
-
-
-
+        if len(motivos_reprovacao) = 0:
+            status == "Aprovada"
+        else:
+            status == "Reprovada"
 
         peca = {
             "id": id_peca,
             "peso": peso,
             "cor": cor,
             "comprimento": comprimento
+            "motivos": motivos_reprovacao
+            "status": status
         }
+
+        peca_cadastrada.append(peca) # nesta lista irão todas as peças
+
+        caixa_atual.append(peca[status == "Aprovada"])
     
 
     elif opcao == '2':
         print("Listando peças cadastradas...")
+
+        for peca in peca_cadastrada:
+            print() # listar a peca selecionada com seus criterios
     
     elif opcao == '3':
         print("Removendo peça...")
     
     elif opcao == '4':
         print("Listando caixas fechadas...")
+
+        for caixa in caixas_fechadas:
+            print() # uma caixa fechada são 10 caixas atuais
     
     elif opcao == '5':
         print("Gerando relatório...")
