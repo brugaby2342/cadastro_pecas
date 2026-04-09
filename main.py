@@ -5,7 +5,7 @@
 #comprimento
 
 #avaliar se está aprovada ou reprovada, sob os seguintes critérios de qualidade:
-#Peso entre 95 kg e 105 kg
+#Peso entre 95 g e 105 g
 #cor azul ou verde
 #comprimento entre 10 cm e 20 cm
 
@@ -43,11 +43,41 @@ while True:
 
     if opcao == '1':
         print("Iniciando cadastro de nova peça...")
-        
+
+
         id_peca = input("Digite o nome da peça: ")
         peso = float(input("Digite o peso da peça (g): "))
-        cor = input("Digite a cor da peça: ")
+        cor = input("Digite a cor da peça: ").lower() # variável precisa ser em minúsculo para ==
         comprimento = float(input("Digite o comprimento da peça (cm): "))
+    
+    
+        # avaliar a peça cadastrada neste momento para aprová-la ou não
+        
+        motivos_reprovacao = []
+        
+        """peso entre 95 g e 105 g
+        peso >= 95 e <= 105
+        cor precisa ser azul ou verde
+        cor == azul or verde
+        comprimento entre 10 cm e 20 cm
+        comprimento >=10 e <= 20
+        o que reprovar inclui na lista motivos_reprovacoes"""
+
+        if not (95.00 <= peso <= 105.00):
+            motivos_reprovacao.append(peso)
+        
+        if cor not in ['azul', 'verde']:
+            motivos_reprovacao.append(cor)
+        
+        if not 10 <= comprimento <= 20:
+            motivos_reprovacao.append(comprimento)
+        
+        
+
+
+
+
+
 
         peca = {
             "id": id_peca,
