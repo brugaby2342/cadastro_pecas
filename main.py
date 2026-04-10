@@ -39,10 +39,10 @@ def exibir_menu():
 
 while True:
     exibir_menu()
-    opcao = input("Selecione uma das seguintes opções: ")
+    opcao = input("Selecione uma das seguintes opções: \n")
 
     if opcao == '1':
-        print("Iniciando cadastro de nova peça...")
+        print("Iniciando cadastro de nova peça...\n")
 
 
         id_peca = input("Digite o nome da peça: ")
@@ -63,17 +63,17 @@ while True:
         # comprimento >=10 e <= 20
         # o que reprovar inclui na lista motivos_reprovacoes
 
-        if not (95.00 <= peso <= 105.00):
+        if not (peso >= 95.00 and peso <= 105.00):
             motivos_reprovacao.append(peso)
         
         if cor not in ['azul', 'verde']:
             motivos_reprovacao.append(cor)
         
-        if not 10 <= comprimento <= 20:
+        if not comprimento >= 10 and comprimento <= 20:
             motivos_reprovacao.append(comprimento)
         
         
-        if len(motivos_reprovacao) = 0:
+        if len(motivos_reprovacao) == 0:
             status == "Aprovada"
         else:
             status == "Reprovada"
@@ -87,34 +87,59 @@ while True:
             "status": status
         }
 
-        peca_cadastrada.append(peca) # nesta lista irão todas as peças
+        pecas_cadastradas.append(peca) # nesta lista irão todas as peças
 
-        caixa_atual.append(peca[status == "Aprovada"])
+        if status == "Aprovada":
+            caixa_atual.append(peca)
+            print(f"\nPeça {id_peca} aprovada e adicionada") # a peça aprovada vai para a caixa atual (até conter 10)
+            # Verificar se a caixa atual já contém 10 para que se possa fechá-la
+
+            if len(caixa_atual) == 10:
+                caixa_fechada.append(caixa_atual)
+                print("Caixa cheia! Abrindo mais uma caixa...")
+        else:
+            print(f"\nATENÇÃO! Peça {id_peca} não passou no teste de qualidade")
+            print("Seu(s) requisito(s) de qualidade não alcançado(s)")
+            for motivos in motivos_reprovacao:
+                print(motivos_reprovacao)
     
 
     elif opcao == '2':
-        print("Listando peças cadastradas...")
+        print("\nListando peças cadastradas...")
 
-        for peca in peca_cadastrada:
-            print() # listar a peca selecionada com seus criterios
+        if pecas_cadastradas == 0:
+            print("Nenhuma peça cadastrada até o momento")
+        else:
+            for peca in pecas_cadastradas:
+            print(f"peça: " {id_peca}
+            "peso: " {peso}
+            "cor: " {cor}
+            "comprimento: " {comprimento}
+            "status: " {status}
+
+            ) # listar a peca selecionada com seus criterios
     
+            if status == "Reprovada":
+                print(motivos_reprovacao)
+
+
     elif opcao == '3':
-        print("Removendo peça...")
+        print("\nRemovendo peça...")
     
     elif opcao == '4':
-        print("Listando caixas fechadas...")
+        print("\nListando caixas fechadas...")
 
         for caixa in caixas_fechadas:
-            print() # uma caixa fechada são 10 caixas atuais
+            print() # uma caixa fechada é uma caixa atual com 10 pecas cadastradas
     
     elif opcao == '5':
-        print("Gerando relatório...")
+        print("\nGerando relatório...")
     
     elif opcao == '0':
-        print("Sistema encerrado!")
+        print("\nSistema encerrado!")
     
     else:
-        print("Opção inválida! Por favor, digite um número entre 0 e 5.")
+        print("\nOpção inválida! Por favor, digite um número entre 0 e 5.")
     break
 
 
