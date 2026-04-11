@@ -1,6 +1,11 @@
-pecas_cadastradas = []  # cada peça com suas características
-caixas_fechadas = []    # caixas que já atingiram a capacidade máxima (10)
-caixa_atual = []        # caixa que está sendo usada no momento
+PESO_MIN, PESO_MAX = 95.0, 105.0
+COMPRIMENTO_MIN, COMPRIMENTO_MAX = 10.0, 20.0
+CORES_VALIDAS = {'azul', 'verde'}
+CAPACIDADE_CAIXA = 10
+
+pecas_cadastradas = []
+caixas_fechadas = []
+caixa_atual = []
 
 
 def exibir_menu():
@@ -16,165 +21,146 @@ def exibir_menu():
     print("="*30 + "\n")
 
 
-while True:
-    exibir_menu()
-    opcao = input("Selecione uma das seguintes opções: \n")
+def validar_peca(peso, cor, comprimento):
+    motivos = []
+    if not (PESO_MIN <= peso <= PESO_MAX):
+        motivos.append(f"Peso fora do padrão ({peso}g)")
+    if cor not in CORES_VALIDAS:
+        motivos.append(f"Cor inválida ({cor})")
+    if not (COMPRIMENTO_MIN <= comprimento <= COMPRIMENTO_MAX):
+        motivos.append(f"Comprimento fora do padrão ({comprimento}cm)")
+    return motivos
 
-    if opcao == '1':
-        print("Iniciando cadastro de nova peça...\n")
 
-        id_peca = input("Digite o ID da peça: ")
-        peso = float(input("Digite o peso da peça (g): "))
-        cor = input("Digite a cor da peça: ").strip().lower()
-        comprimento = float(input("Digite o comprimento da peça (cm): "))
+def adicionar_a_caixa(peca):
+    caixa_atual.append(peca)
+    if len(caixa_atual) == CAPACIDADE_CAIXA:
+        caixas_fechadas.append(caixa_atual.copy())
+        caixa_atual.clear()
+        print("Caixa cheia! Abrindo mais uma caixa...")
 
-        motivos_reprovacao = []
 
-        if not (95.00 <= peso <= 105.00):
-            motivos_reprovacao.append(f"Peso fora do padrão ({peso}g)")
+def reorganizar_caixas():
+    caixas_fechadas.clear()
+    caixa_atual.clear()
+    for peca in pecas_cadastradas:
+        if peca['status'] == "Aprovada":
+            adicionar_a_caixa(peca)
 
-        if cor not in ['azul', 'verde']:
-            motivos_reprovacao.append(f"Cor inválida ({cor})")
 
-        if not (10 <= comprimento <= 20):
-            motivos_reprovacao.append(f"Comprimento fora do padrão ({comprimento}cm)")
+def cadastrar_peca():
+    print("Iniciando cadastro de nova peça...\n")
+    id_peca = input("Digite o ID da peça: ")
+    peso = float(input("Digite o peso da peça (g): "))
+    cor = input("Digite a cor da peça: ").strip().lower()
+    comprimento = float(input("Digite o comprimento da peça (cm): "))
 
-        # FIX 1: atribuição com = em vez de comparação com ==
-        if len(motivos_reprovacao) == 0:
-            status = "Aprovada"
-        else:
-            status = "Reprovada"
+    motivos = validar_peca(peso, cor, comprimento)
+    status = "Aprovada" if not motivos else "Reprovada"
 
-        # FIX 11: peca criada depois que status está definido
-        peca = {
-            "id": id_peca,
-            "peso": peso,
-            "cor": cor,
-            "comprimento": comprimento,
-            "motivos": motivos_reprovacao,
-            "status": status
-        }
+    peca = {
+        "id": id_peca,
+        "peso": peso,
+        "cor": cor,
+        "comprimento": comprimento,
+        "motivos": motivos,
+        "status": status,
+    }
+    pecas_cadastradas.append(peca)
 
-        pecas_cadastradas.append(peca)
-
-        if status == "Aprovada":
-            caixa_atual.append(peca)
-            print(f"\nPeça {id_peca} aprovada e adicionada.")
-
-            if len(caixa_atual) == 10:
-                # FIX 2: nome correto da lista é caixas_fechadas
-                caixas_fechadas.append(caixa_atual.copy())
-                caixa_atual.clear()
-                print("Caixa cheia! Abrindo mais uma caixa...")
-        else:
-            print(f"\nATENÇÃO! Peça {id_peca} não passou no teste de qualidade.")
-            print("Seu(s) requisito(s) de qualidade não foi alcançado(s):")
-            for motivo in motivos_reprovacao:
-                print(f"  - {motivo}")
-
-    elif opcao == '2':
-        print("\nListando peças cadastradas...")
-
-        # FIX 3: comparar len() com 0, não a lista diretamente
-        if len(pecas_cadastradas) == 0:
-            print("Nenhuma peça cadastrada até o momento.")
-        else:
-            # FIX 4 e 5: indentação correta e ", ".join()
-            for peca in pecas_cadastradas:
-                print(f"ID: {peca['id']} | Status: {peca['status']}")
-                print(f"Medidas: {peca['peso']}g, {peca['cor'].capitalize()}, {peca['comprimento']}cm")
-
-                if peca['status'] == "Reprovada":
-                    motivos_nome = ", ".join(peca['motivos'])
-                    print(f"  Falhas encontradas: {motivos_nome}")
-
-    elif opcao == '3':
-        print("\nRemovendo peça...")
-
-        id_remover = input("Digite o ID da peça que você deseja remover: ")
-
-        peca_encontrada = False
-
-        for peca in pecas_cadastradas:
-            if peca['id'] == id_remover:
-                pecas_cadastradas.remove(peca)
-                peca_encontrada = True
-                print(f"Peça ID {id_remover} removida com sucesso!")
-                break
-
-        # FIX 6: bloco if/else fora do for, executado após o loop terminar
-        if not peca_encontrada:
-            print(f"Peça ID {id_remover} não encontrada.")
-        else:
-            caixas_fechadas.clear()
-            caixa_atual.clear()
-
-            for peca in pecas_cadastradas:
-                if peca['status'] == "Aprovada":
-                    caixa_atual.append(peca)
-
-                    if len(caixa_atual) == 10:
-                        caixas_fechadas.append(caixa_atual.copy())
-                        caixa_atual.clear()
-
-            print(f"Caixas reorganizadas após a remoção da peça {id_remover}.")
-
-    elif opcao == '4':
-        print("\nListando caixas fechadas...")
-
-        # FIX 7 e 8: indentação correta do else e remoção do ) indevido na f-string
-        if len(caixas_fechadas) == 0:
-            print("Nenhuma caixa foi fechada ainda.")
-            print(f"Status da caixa atual: {len(caixa_atual)} de 10 peças.")
-        else:
-            for indice, caixa in enumerate(caixas_fechadas):
-                print(f"CAIXA {indice + 1} (10 peças):")
-
-                # FIX 9: sintaxe correta peca['id'] em vez de peca:['id']
-                for peca in caixa:
-                    print(f"  Peça ID: {peca['id']}; Cor: {peca['cor'].capitalize()}")
-
-    elif opcao == '5':
-        print("\nGerando relatório...")
-
-        if len(pecas_cadastradas) == 0:
-            print("Não há dados suficientes para gerar o relatório.")
-        else:
-            total_cadastradas = len(pecas_cadastradas)
-            total_aprovadas = 0
-            total_reprovadas = 0
-            contador_motivos = {}
-
-            for peca in pecas_cadastradas:
-                if peca['status'] == "Aprovada":
-                    total_aprovadas += 1
-                else:
-                    total_reprovadas += 1
-
-                    for motivo in peca['motivos']:
-                        if motivo in contador_motivos:
-                            contador_motivos[motivo] += 1
-                        else:
-                            contador_motivos[motivo] = 1
-
-            total_caixas = len(caixas_fechadas)
-            if len(caixa_atual) > 0:
-                total_caixas += 1
-
-            print(f"Total de peças cadastradas: {total_cadastradas}")
-            print(f"Total de peças aprovadas: {total_aprovadas}")
-            print(f"Total de peças reprovadas: {total_reprovadas}")
-            print(f"Total de caixas utilizadas (fechadas e em uso): {total_caixas}")
-
-            if total_reprovadas > 0:
-                print("Os motivos para reprovação registrados são:")
-                for motivo, quantidade in contador_motivos.items():
-                    print(f"  {motivo}: {quantidade} vez(es)")
-
-    elif opcao == '0':
-        print("\nSistema encerrado!")
-        # FIX 10: break apenas aqui, dentro do bloco do opcao '0'
-        break
-
+    if status == "Aprovada":
+        adicionar_a_caixa(peca)
+        print(f"\nPeça {id_peca} aprovada e adicionada.")
     else:
-        print("\nOpção inválida! Por favor, digite um número entre 0 e 5.")
+        print(f"\nATENÇÃO! Peça {id_peca} não passou no teste de qualidade.")
+        print("Nem todos os requisitos de qualidade foram alcançados:")
+        for motivo in motivos:
+            print(f"  - {motivo}")
+
+
+def listar_pecas():
+    if not pecas_cadastradas:
+        print("Nenhuma peça cadastrada até o momento.")
+        return
+    for peca in pecas_cadastradas:
+        print(f"ID: {peca['id']} | Status: {peca['status']}")
+        print(f"Medidas: {peca['peso']}g, {peca['cor'].capitalize()}, {peca['comprimento']}cm")
+        if peca['status'] == "Reprovada":
+            print(f"  Falhas encontradas: {', '.join(peca['motivos'])}")
+
+
+def remover_peca():
+    id_remover = input("Digite o ID da peça que você deseja remover: ")
+    peca_encontrada = next((p for p in pecas_cadastradas if p['id'] == id_remover), None)
+
+    if peca_encontrada is None:
+        print(f"Peça ID {id_remover} não encontrada.")
+        return
+
+    pecas_cadastradas.remove(peca_encontrada)
+    print(f"Peça ID {id_remover} removida com sucesso!")
+    reorganizar_caixas()
+    print(f"Caixas reorganizadas após a remoção da peça {id_remover}.")
+
+
+def listar_caixas():
+    if not caixas_fechadas:
+        print("Nenhuma caixa foi fechada ainda.")
+        print(f"Status da caixa atual: {len(caixa_atual)} de {CAPACIDADE_CAIXA} peças.")
+        return
+    for indice, caixa in enumerate(caixas_fechadas):
+        print(f"CAIXA {indice + 1} ({CAPACIDADE_CAIXA} peças):")
+        for peca in caixa:
+            print(f"  Peça ID: {peca['id']}; Cor: {peca['cor'].capitalize()}")
+
+
+def gerar_relatorio():
+    if not pecas_cadastradas:
+        print("Não há dados suficientes para gerar o relatório.")
+        return
+
+    total_aprovadas = sum(1 for p in pecas_cadastradas if p['status'] == "Aprovada")
+    total_reprovadas = len(pecas_cadastradas) - total_aprovadas
+    total_caixas = len(caixas_fechadas) + (1 if caixa_atual else 0)
+
+    print(f"Total de peças cadastradas: {len(pecas_cadastradas)}")
+    print(f"Total de peças aprovadas: {total_aprovadas}")
+    print(f"Total de peças reprovadas: {total_reprovadas}")
+    print(f"Total de caixas utilizadas (fechadas e em uso): {total_caixas}")
+
+    if total_reprovadas > 0:
+        contador_motivos = {}
+        for peca in pecas_cadastradas:
+            if peca['status'] == "Reprovada":
+                for motivo in peca['motivos']:
+                    contador_motivos[motivo] = contador_motivos.get(motivo, 0) + 1
+        print("Os motivos para reprovação registrados são:")
+        for motivo, quantidade in contador_motivos.items():
+            print(f"  {motivo}: {quantidade} vez(es)")
+
+
+OPCOES = {
+    '1': cadastrar_peca,
+    '2': listar_pecas,
+    '3': remover_peca,
+    '4': listar_caixas,
+    '5': gerar_relatorio,
+}
+
+
+def main():
+    while True:
+        exibir_menu()
+        opcao = input("Selecione uma das seguintes opções: \n")
+
+        if opcao == '0':
+            print("\nSistema encerrado!")
+            break
+        elif opcao in OPCOES:
+            OPCOES[opcao]()
+        else:
+            print("\nOpção inválida! Por favor, digite um número entre 0 e 5.")
+
+
+if __name__ == "__main__":
+    main()
