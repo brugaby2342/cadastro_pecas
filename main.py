@@ -35,7 +35,7 @@ def validar_peca(peso, cor, comprimento):
 def adicionar_a_caixa(peca):
     caixa_atual.append(peca)
     if len(caixa_atual) == CAPACIDADE_CAIXA:
-        caixas_fechadas.append(caixa_atual.copy())
+        caixas_fechadas.append(caixa_atual.copy()) # Usamos .copy() para salvar uma cópia exata antes de esvaziar
         caixa_atual.clear()
         print("Caixa cheia! Abrindo mais uma caixa...")
 
@@ -49,7 +49,7 @@ def reorganizar_caixas():
 
 
 def cadastrar_peca():
-    print("Iniciando cadastro de nova peça...\n")
+    print("\nIniciando cadastro de nova peça...\n")
     id_peca = input("Digite o ID da peça: ")
     peso = float(input("Digite o peso da peça (g): "))
     cor = input("Digite a cor da peça: ").strip().lower()
@@ -70,9 +70,9 @@ def cadastrar_peca():
 
     if status == "Aprovada":
         adicionar_a_caixa(peca)
-        print(f"\nPeça {id_peca} aprovada e adicionada.")
+        print(f"\n✔ Peça {id_peca} aprovada e adicionada.")
     else:
-        print(f"\nATENÇÃO! Peça {id_peca} não passou no teste de qualidade.")
+        print(f"\n✘ ATENÇÃO! Peça {id_peca} não passou no teste de qualidade.")
         print("Nem todos os requisitos de qualidade foram alcançados:")
         for motivo in motivos:
             print(f"  - {motivo}")
@@ -80,13 +80,14 @@ def cadastrar_peca():
 
 def listar_pecas():
     if not pecas_cadastradas:
-        print("Nenhuma peça cadastrada até o momento.")
+        print("\nNenhuma peça cadastrada até o momento.")
         return
     for peca in pecas_cadastradas:
-        print(f"ID: {peca['id']} | Status: {peca['status']}")
-        print(f"Medidas: {peca['peso']}g, {peca['cor'].capitalize()}, {peca['comprimento']}cm")
+        print(f"\nID: {peca['id']} | Status: {peca['status']}")
+        print(f"Medidas: {peca['peso']}g, {peca['cor'].capitalize()}, {peca['comprimento']}cm") # O capitalize transforma o primeiro caractere em maiúscula e todos os outros em minúscula
         if peca['status'] == "Reprovada":
-            print(f"  Falhas encontradas: {', '.join(peca['motivos'])}")
+            print(f"  Falhas encontradas: {', '.join(peca['motivos'])}") # O join transforma a lista de motivos em um texto separado por vírgulas
+
 
 
 def remover_peca():
@@ -94,21 +95,22 @@ def remover_peca():
     peca_encontrada = next((p for p in pecas_cadastradas if p['id'] == id_remover), None)
 
     if peca_encontrada is None:
-        print(f"Peça ID {id_remover} não encontrada.")
+        print(f"\nPeça ID {id_remover} não encontrada.")
         return
 
     pecas_cadastradas.remove(peca_encontrada)
-    print(f"Peça ID {id_remover} removida com sucesso!")
+    print(f"\nPeça ID {id_remover} removida com sucesso!")
     reorganizar_caixas()
     print(f"Caixas reorganizadas após a remoção da peça {id_remover}.")
 
 
 def listar_caixas():
     if not caixas_fechadas:
-        print("Nenhuma caixa foi fechada ainda.")
-        print(f"Status da caixa atual: {len(caixa_atual)} de {CAPACIDADE_CAIXA} peças.")
+        print("\nNenhuma caixa foi fechada ainda.")
+        print(f"\nStatus da caixa atual: {len(caixa_atual)} de {CAPACIDADE_CAIXA} peças.")
         return
-    for indice, caixa in enumerate(caixas_fechadas):
+    for indice, caixa in enumerate(caixas_fechadas): # O enumerate ajuda a contar as caixas (1, 2, 3...) enquanto percorremos a lista
+
         print(f"CAIXA {indice + 1} ({CAPACIDADE_CAIXA} peças):")
         for peca in caixa:
             print(f"  Peça ID: {peca['id']}; Cor: {peca['cor'].capitalize()}")
@@ -116,17 +118,21 @@ def listar_caixas():
 
 def gerar_relatorio():
     if not pecas_cadastradas:
-        print("Não há dados suficientes para gerar o relatório.")
+        print("\n" + "="*30)
+        print("\nNão há dados suficientes para gerar o relatório.")
+        print("\n" + "="*30)
         return
 
     total_aprovadas = sum(1 for p in pecas_cadastradas if p['status'] == "Aprovada")
     total_reprovadas = len(pecas_cadastradas) - total_aprovadas
     total_caixas = len(caixas_fechadas) + (1 if caixa_atual else 0)
 
-    print(f"Total de peças cadastradas: {len(pecas_cadastradas)}")
-    print(f"Total de peças aprovadas: {total_aprovadas}")
-    print(f"Total de peças reprovadas: {total_reprovadas}")
-    print(f"Total de caixas utilizadas (fechadas e em uso): {total_caixas}")
+    print("\n" + "="*30)
+    print(f"\n Total de peças cadastradas: {len(pecas_cadastradas)}")
+    print(f"✔ Total de peças aprovadas: {total_aprovadas}")
+    print(f"✘ Total de peças reprovadas: {total_reprovadas}")
+    print(f"📦 Total de caixas utilizadas (fechadas e em uso): {total_caixas}")
+    print("\n" + "="*30)
 
     if total_reprovadas > 0:
         contador_motivos = {}
@@ -134,7 +140,7 @@ def gerar_relatorio():
             if peca['status'] == "Reprovada":
                 for motivo in peca['motivos']:
                     contador_motivos[motivo] = contador_motivos.get(motivo, 0) + 1
-        print("Os motivos para reprovação registrados são:")
+        print("\nOs motivos para reprovação registrados são:")
         for motivo, quantidade in contador_motivos.items():
             print(f"  {motivo}: {quantidade} vez(es)")
 
@@ -159,7 +165,7 @@ def main():
         elif opcao in OPCOES:
             OPCOES[opcao]()
         else:
-            print("\nOpção inválida! Por favor, digite um número entre 0 e 5.")
+            print("\n✘ Opção inválida! Por favor, digite um número entre 0 e 5.")
 
 
 if __name__ == "__main__":
