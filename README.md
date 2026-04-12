@@ -20,7 +20,7 @@ Este sistema simula o controle de qualidade de uma linha de produção industria
 
 ---
 
-## :memo: Como funciona
+## 📝 Como funciona
 
 O sistema opera via terminal (linha de comando) através de um menu interativo. Ele recebe os dados de cada peça fabricada e avalia automaticamente se ela está aprovada ou reprovada com base em critérios rigorosos de qualidade.
 
