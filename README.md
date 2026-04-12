@@ -4,6 +4,8 @@ Protótipo desenvolvido em Python para a disciplina **Algoritmos e Lógica de Pr
 **UniFeCAF/Rocketseat · 1º Semestre — Inteligência Artificial e Automação Digital**</br>
 README.md mais detalhado para consultas posteriores com fins acadêmicas.
 
+<img width="980" height="413" alt="Captura de Tela 2026-04-12 às 16 01 50" src="https://github.com/user-attachments/assets/2d684f93-d5e2-464a-b2c5-cfd841ed09b0" />
+
 ---
 
 ## 📋 Sobre o Projeto
